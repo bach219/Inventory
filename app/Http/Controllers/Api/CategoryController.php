@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Category;
 use DB;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryController extends Controller
 {
@@ -28,11 +29,11 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $validateData = $request->validate([
-         'category_name' => 'required|unique:categories|max:255',
-        ]);
+        // $validateData = $request->validate([
+        //  'category_name' => 'required|unique:categories|max:255',
+        // ]);
 
          $category = new Category;
          $category->category_name = $request->category_name;
@@ -61,7 +62,7 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
         $data = array();
         $data['category_name'] =  $request->category_name;

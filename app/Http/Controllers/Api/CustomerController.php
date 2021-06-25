@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use DB;
 use App\Model\Customer;
 use Image;
+use App\Http\Requests\CustomerRequest;
+
+
+
 
 class CustomerController extends Controller
 {
@@ -28,14 +32,15 @@ class CustomerController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CustomerRequest $request)
     {
-        $validateData = $request->validate([
-         'name' => 'required|unique:customers|max:255',
-         'email' => 'required',
-         'phone' => 'required|unique:customers',
+        // $validateData = $request->validate([
+        //  'name' => 'required|unique:customers|max:255',
+        //  'email' => 'required',
+        //  'phone' => 'required|unique:customers',
+        //  'address' => 'required',
 
-        ]);
+        // ]);
 
       if ($request->photo) {
          $position = strpos($request->photo, ';');
@@ -90,7 +95,7 @@ class CustomerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CustomerRequest $request, $id)
     {
        $data = array();
         $data['name'] = $request->name;

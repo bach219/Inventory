@@ -3,6 +3,7 @@
 use Monolog\Handler\NullHandler;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
+use Neo\PusherLogger\PusherLoggerHandler;
 
 return [
 
@@ -37,7 +38,7 @@ return [
     'channels' => [
         'stack' => [
             'driver' => 'stack',
-            'channels' => ['single'],
+            'channels' => ['daily', 'pusher'],
             'ignore_exceptions' => false,
         ],
 
@@ -70,6 +71,12 @@ return [
                 'host' => env('PAPERTRAIL_URL'),
                 'port' => env('PAPERTRAIL_PORT'),
             ],
+        ],
+
+        'pusher' => [
+            'driver' => 'monolog',
+            'level' => 'debug',
+            'handler' => PusherLoggerHandler::class,
         ],
 
         'stderr' => [

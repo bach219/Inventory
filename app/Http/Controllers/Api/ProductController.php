@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use DB;
 use App\Model\Product;
 use Image;
+use App\Http\Requests\ProductRequest;
 
 class ProductController extends Controller
 {
@@ -33,19 +34,19 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        $validateData = $request->validate([
-         'product_name' => 'required|max:255',
-         'product_code' => 'required|unique:products|max:255',
-         'category_id' => 'required',
-         'supplier_id' => 'required',
-         'buying_price' => 'required',
-         'selling_price' => 'required',
-         'buying_date' => 'required',
-         'product_quantity' => 'required',
+      //  $validateData = $request->validate([
+      //   'product_name' => 'required|max:255',
+      //   'product_code' => 'required|unique:products|max:255',
+      //   'category_id' => 'required',
+      //   'supplier_id' => 'required',
+      //   'buying_price' => 'required',
+      //   'selling_price' => 'required',
+      //   'buying_date' => 'required',
+       //  'product_quantity' => 'required',
 
-        ]);
+       // ]);
 
  if ($request->image) {
          $position = strpos($request->image, ';');
@@ -111,7 +112,7 @@ class ProductController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ProductRequest $request, $id)
     {
        $data = array();
         $data['product_name'] = $request->product_name;

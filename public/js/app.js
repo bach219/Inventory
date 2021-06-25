@@ -2066,6 +2066,17 @@ __webpack_require__.r(__webpack_exports__);
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
+    // let level = "info";
+    // let message = "message";
+    // // let errToastr = () => toastr.error("Oops! An error encountered");
+    // axios
+    //     .post("/api/push", { message, level })
+    //     .then(r =>
+    //         r.data.status
+    //             ? toastr.success("Log dispatch successful")
+    //             : toastr.error("Oops! An error encountered")
+    //     )
+    //     .catch(errToastr);
     if (User.loggedIn()) {
       this.$router.push({
         name: "home"
@@ -2078,29 +2089,52 @@ __webpack_require__.r(__webpack_exports__);
         email: null,
         password: null
       },
-      errors: {}
+      errors: {},
+      errorAlert: 0
     };
   },
   methods: {
     login: function login() {
-      var _this = this;
+      var level = "info";
+      var message = "message";
 
-      axios.post("/api/auth/login", this.form).then(function (res) {
-        User.responseAfterLogin(res);
-        Toast.fire({
-          icon: "success",
-          title: "Đăng nhập thành công!"
-        });
+      var errToastr = function errToastr() {
+        return toastr.error("Oops! An error encountered");
+      };
 
-        _this.$router.push({
-          name: "home"
-        });
-      })["catch"](function (error) {
-        return _this.errors = error.response.data.errors;
-      })["catch"](Toast.fire({
-        icon: "warning",
-        title: "Email hoặc mật khẩu không đúng!"
-      }));
+      axios.post("/api/push", {
+        message: message,
+        level: level
+      }).then(function (r) {
+        return r.data.status ? toastr.success("Log dispatch successful") : toastr.error("Oops! An error encountered");
+      })["catch"](errToastr); // return new Promise((resolve, reject) => {
+      //     axios
+      //         .post("/api/auth/login", this.form)
+      //         .then(res => {
+      //             resolve(res);
+      //             console.log(res);
+      //             User.responseAfterLogin(res);
+      //             Toast.fire({
+      //                 icon: "success",
+      //                 title: "Đăng nhập thành công!"
+      //             });
+      //             this.$router.push({ name: "home" });
+      //         })
+      //         .catch(error => {
+      //             reject(error);
+      //             this.errors = error.response.data.errors;
+      //             Toast.fire({
+      //                 icon: "error",
+      //                 title: "Email hoặc mật khẩu không đúng!"
+      //             });
+      //         })
+      //         .catch(
+      //             Toast.fire({
+      //                 icon: "info",
+      //                 title: "Đang xử lý..."
+      //             })
+      //         );
+      // });
     }
   }
 });
@@ -2233,6 +2267,35 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     if (User.loggedIn()) {
@@ -2247,7 +2310,7 @@ __webpack_require__.r(__webpack_exports__);
         name: null,
         email: null,
         password: null,
-        confirm_password: null
+        password_confirmation: null
       },
       errors: {}
     };
@@ -2256,18 +2319,31 @@ __webpack_require__.r(__webpack_exports__);
     signup: function signup() {
       var _this = this;
 
-      axios.post("/api/auth/signup", this.form).then(function (res) {
-        User.responseAfterLogin(res);
-        Toast.fire({
-          icon: "success",
-          title: "Đăng ký thành công!"
-        });
+      return new Promise(function (resolve, reject) {
+        axios.post("/api/auth/signup", _this.form).then(function (res) {
+          resolve(res);
+          console.log(res);
+          User.responseAfterLogin(res);
+          Toast.fire({
+            icon: "success",
+            title: "Đăng ký tài khoản thành công!"
+          });
 
-        _this.$router.push({
-          name: "home"
-        });
-      })["catch"](function (error) {
-        return _this.errors = error.response.data.errors;
+          _this.$router.push({
+            name: "home"
+          });
+        })["catch"](function (error) {
+          reject(error);
+          _this.errors = error.response.data.errors; // console.log(error.response);
+
+          Toast.fire({
+            icon: "error",
+            title: "Đã xảy ra lỗi khi đăng ký!"
+          });
+        })["catch"](Toast.fire({
+          icon: "info",
+          title: "Đang xử lý..."
+        }));
       });
     }
   }
@@ -2353,11 +2429,16 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push({
-        name: '/'
+        name: "/"
       });
     }
   },
@@ -2373,9 +2454,9 @@ __webpack_require__.r(__webpack_exports__);
     categoryInsert: function categoryInsert() {
       var _this = this;
 
-      axios.post('/api/category', this.form).then(function () {
+      axios.post("/api/category", this.form).then(function () {
         _this.$router.push({
-          name: 'category'
+          name: "category"
         });
 
         Notification.success();
@@ -2581,18 +2662,28 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = (_defineProperty({
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push({
-        name: '/'
+        name: "/"
       });
     }
   },
   data: function data() {
     return {
       categories: [],
-      searchTerm: ''
+      searchTerm: ""
     };
   },
   computed: {
@@ -2608,33 +2699,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allCategory: function allCategory() {
       var _this2 = this;
 
-      axios.get('/api/category/').then(function (_ref) {
+      axios.get("/api/category/").then(function (_ref) {
         var data = _ref.data;
-        return _this2.categories = data;
+        console.log(data);
+        _this2.categories = data;
       })["catch"]();
     },
     deleteCategory: function deleteCategory(id) {
       var _this3 = this;
 
       Swal.fire({
-        title: 'Xác nhận xóa?',
-        icon: 'warning',
+        title: "Xác nhận xóa?",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xóa'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy"
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]('/api/category/' + id).then(function () {
+          axios["delete"]("/api/category/" + id).then(function () {
             _this3.categories = _this3.categories.filter(function (category) {
               return category.id != id;
             });
           })["catch"](function () {
             _this3.$router.push({
-              name: 'category'
+              name: "category"
             });
           });
-          Swal.fire('Đã xóa thành công!');
+          Swal.fire("Đã xóa thành công!");
         }
       });
     }
@@ -3097,18 +3190,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = (_defineProperty({
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push({
-        name: '/'
+        name: "/"
       });
     }
   },
   data: function data() {
     return {
       customers: [],
-      searchTerm: ''
+      searchTerm: ""
     };
   },
   computed: {
@@ -3124,33 +3234,35 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allCustomer: function allCustomer() {
       var _this2 = this;
 
-      axios.get('/api/customer/').then(function (_ref) {
+      axios.get("/api/customer/").then(function (_ref) {
         var data = _ref.data;
-        return _this2.customers = data;
+        console.log(data);
+        _this2.customers = data;
       })["catch"]();
     },
     deleteCustomer: function deleteCustomer(id) {
       var _this3 = this;
 
       Swal.fire({
-        title: 'Xác nhận xóa?',
-        icon: 'warning',
+        title: "Xác nhận xóa?",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xóa'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy"
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]('/api/customer/' + id).then(function () {
+          axios["delete"]("/api/customer/" + id).then(function () {
             _this3.customers = _this3.customers.filter(function (customer) {
               return customer.id != id;
             });
           })["catch"](function () {
             _this3.$router.push({
-              name: 'customer'
+              name: "customer"
             });
           });
-          Swal.fire('Đã xóa.');
+          Swal.fire("Đã xóa.");
         }
       });
     }
@@ -3353,6 +3465,55 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   created: function created() {
     if (!User.loggedIn()) {
@@ -3370,8 +3531,9 @@ __webpack_require__.r(__webpack_exports__);
         sallery: null,
         address: null,
         photo: null,
-        nid: null,
-        joining_date: null
+        // nid: null,
+        joining_date: null,
+        password: null
       },
       errors: {}
     };
@@ -3611,6 +3773,50 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = (_created$data$created = {
   created: function created() {
     if (!User.loggedIn()) {
@@ -3629,7 +3835,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         address: "",
         photo: "",
         newphoto: "",
-        nid: "",
+        password: "",
+        // nid: "",
         joining_date: ""
       },
       errors: {}
@@ -3779,6 +3986,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = (_defineProperty({
   created: function created() {
     if (!User.loggedIn()) {
@@ -3820,7 +4031,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
-        confirmButtonText: "Xóa"
+        confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy"
       }).then(function (result) {
         if (result.value) {
           axios["delete"]("/api/employee/" + id).then(function () {
@@ -4053,19 +4265,38 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = (_created$data$created = {
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push({
-        name: '/'
+        name: "/"
       });
     }
   },
   data: function data() {
     return {
       form: {
-        details: '',
-        amount: ''
+        details: "",
+        amount: ""
       },
       errors: {}
     };
@@ -4074,18 +4305,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   var _this = this;
 
   var id = this.$route.params.id;
-  axios.get('/api/expense/' + id).then(function (_ref) {
+  axios.get("/api/expense/" + id).then(function (_ref) {
     var data = _ref.data;
     return _this.form = data;
-  })["catch"](console.log('error'));
+  })["catch"](console.log("error"));
 }), _defineProperty(_created$data$created, "methods", {
   expenseUpdate: function expenseUpdate() {
     var _this2 = this;
 
     var id = this.$route.params.id;
-    axios.patch('/api/expense/' + id, this.form).then(function () {
+    axios.patch("/api/expense/" + id, this.form).then(function () {
       _this2.$router.push({
-        name: 'expense'
+        name: "expense"
       });
 
       Notification.success();
@@ -4172,18 +4403,30 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = (_defineProperty({
   created: function created() {
     if (!User.loggedIn()) {
       this.$router.push({
-        name: '/'
+        name: "/"
       });
     }
   },
   data: function data() {
     return {
       expenses: [],
-      searchTerm: ''
+      searchTerm: ""
     };
   },
   computed: {
@@ -4199,7 +4442,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     allExpense: function allExpense() {
       var _this2 = this;
 
-      axios.get('/api/expense/').then(function (_ref) {
+      axios.get("/api/expense/").then(function (_ref) {
         var data = _ref.data;
         return _this2.expenses = data;
       })["catch"]();
@@ -4208,24 +4451,24 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var _this3 = this;
 
       Swal.fire({
-        title: 'Xác nhận xóa?',
-        icon: 'warning',
+        title: "Xác nhận xóa?",
+        icon: "warning",
         showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Xóa'
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Xóa"
       }).then(function (result) {
         if (result.value) {
-          axios["delete"]('/api/expense/' + id).then(function () {
+          axios["delete"]("/api/expense/" + id).then(function () {
             _this3.expenses = _this3.expenses.filter(function (expense) {
               return expense.id != id;
             });
           })["catch"](function () {
             _this3.$router.push({
-              name: 'expense'
+              name: "expense"
             });
           });
-          Swal.fire('Đã xóa');
+          Swal.fire("Đã xóa");
         }
       });
     }
@@ -12284,7 +12527,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#em_photo{\n  height: 40px;\n  width: 40px;\n}\n", ""]);
+exports.push([module.i, "\n#em_photo {\r\n    height: 40px;\r\n    width: 40px;\n}\r\n", ""]);
 
 // exports
 
@@ -12303,7 +12546,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#em_photo{\n  height: 40px;\n  width: 40px;\n}\n", ""]);
+exports.push([module.i, "\n#em_photo {\r\n    height: 40px;\r\n    width: 40px;\n}\r\n", ""]);
 
 // exports
 
@@ -12322,7 +12565,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#em_photo {\r\n  height: 40px;\r\n  width: 40px;\n}\r\n", ""]);
+exports.push([module.i, "\n#em_photo {\r\n    height: 40px;\r\n    width: 40px;\n}\r\n", ""]);
 
 // exports
 
@@ -12341,7 +12584,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "\n#em_photo{\n  height: 40px;\n  width: 40px;\n}\n", ""]);
+exports.push([module.i, "\n#em_photo {\r\n    height: 40px;\r\n    width: 40px;\n}\r\n", ""]);
 
 // exports
 
@@ -51067,8 +51310,6 @@ var render = function() {
                       _vm._v(" "),
                       _vm._m(1),
                       _vm._v(" "),
-                      _vm._m(2),
-                      _vm._v(" "),
                       _c("hr")
                     ]
                   ),
@@ -51126,35 +51367,6 @@ var staticRenderFns = [
           "\n                                        ĐĂNG NHẬP\n                                    "
         )
       ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "form-group" }, [
-      _c(
-        "div",
-        {
-          staticClass: "custom-control custom-checkbox small",
-          staticStyle: { "line-height": "1.5rem" }
-        },
-        [
-          _c("input", {
-            staticClass: "custom-control-input",
-            attrs: { type: "checkbox", id: "customCheck" }
-          }),
-          _vm._v(" "),
-          _c(
-            "label",
-            {
-              staticClass: "custom-control-label",
-              attrs: { for: "customCheck" }
-            },
-            [_vm._v("Lưu đăng nhập")]
-          )
-        ]
-      )
     ])
   },
   function() {
@@ -51266,7 +51478,17 @@ var render = function() {
                               _vm.$set(_vm.form, "name", $event.target.value)
                             }
                           }
-                        })
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.name
+                          ? _c("small", { staticClass: "text-danger" }, [
+                              _vm._v(
+                                "\n                                            " +
+                                  _vm._s(_vm.errors.name[0]) +
+                                  "\n                                        "
+                              )
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group" }, [
@@ -51295,7 +51517,17 @@ var render = function() {
                               _vm.$set(_vm.form, "email", $event.target.value)
                             }
                           }
-                        })
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.email
+                          ? _c("small", { staticClass: "text-danger" }, [
+                              _vm._v(
+                                "\n                                            " +
+                                  _vm._s(_vm.errors.email[0]) +
+                                  "\n                                        "
+                              )
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group" }, [
@@ -51327,7 +51559,17 @@ var render = function() {
                               )
                             }
                           }
-                        })
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.password
+                          ? _c("small", { staticClass: "text-danger" }, [
+                              _vm._v(
+                                "\n                                            " +
+                                  _vm._s(_vm.errors.password[0]) +
+                                  "\n                                        "
+                              )
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
                       _c("div", { staticClass: "form-group" }, [
@@ -51360,7 +51602,17 @@ var render = function() {
                               )
                             }
                           }
-                        })
+                        }),
+                        _vm._v(" "),
+                        _vm.errors.password_confirmation
+                          ? _c("small", { staticClass: "text-danger" }, [
+                              _vm._v(
+                                "\n                                            " +
+                                  _vm._s(_vm.errors.password_confirmation[0]) +
+                                  "\n                                        "
+                              )
+                            ])
+                          : _vm._e()
                       ]),
                       _vm._v(" "),
                       _vm._m(1)
@@ -51490,7 +51742,8 @@ var render = function() {
                                   name: "model",
                                   rawName: "v-model",
                                   value: _vm.form.category_name,
-                                  expression: "form.category_name"
+                                  expression:
+                                    "\n                                                        form.category_name\n                                                    "
                                 }
                               ],
                               staticClass: "form-control",
@@ -51517,9 +51770,9 @@ var render = function() {
                             _vm.errors.category_name
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    " " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.category_name[0]) +
-                                      " "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -51552,7 +51805,9 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "text-center" }, [
       _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
-        _vm._v("Thêm nhóm món")
+        _vm._v(
+          "\n                                        Thêm nhóm món\n                                    "
+        )
       ])
     ])
   },
@@ -51564,7 +51819,11 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-primary btn-block", attrs: { type: "submit" } },
-        [_vm._v("Lưu")]
+        [
+          _vm._v(
+            "\n                                            Lưu\n                                        "
+          )
+        ]
       )
     ])
   }
@@ -51778,9 +52037,7 @@ var render = function() {
                   "tbody",
                   _vm._l(_vm.filtersearch, function(category) {
                     return _c("tr", { key: category.id }, [
-                      _c("td", [
-                        _vm._v(" " + _vm._s(category.category_name) + " ")
-                      ]),
+                      _c("td", [_vm._v(_vm._s(category.category_name))]),
                       _vm._v(" "),
                       _c(
                         "td",
@@ -51846,7 +52103,9 @@ var staticRenderFns = [
       },
       [
         _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
-          _vm._v("Danh sách nhóm món")
+          _vm._v(
+            "\n                        Danh sách nhóm món\n                    "
+          )
         ])
       ]
     )
@@ -52571,7 +52830,7 @@ var render = function() {
         _c(
           "router-link",
           { staticClass: "btn btn-primary", attrs: { to: "/store-customer" } },
-          [_vm._v("Thêm khách hàng ")]
+          [_vm._v("Thêm khách hàng\n        ")]
         )
       ],
       1
@@ -52618,9 +52877,9 @@ var render = function() {
                 _vm._v(" "),
                 _c(
                   "tbody",
-                  _vm._l(_vm.filtersearch, function(customer) {
+                  _vm._l(_vm.customers, function(customer) {
                     return _c("tr", { key: customer.id }, [
-                      _c("td", [_vm._v(" " + _vm._s(customer.name) + " ")]),
+                      _c("td", [_vm._v(_vm._s(customer.name))]),
                       _vm._v(" "),
                       _c("td", [
                         _c("img", {
@@ -52698,7 +52957,9 @@ var staticRenderFns = [
       },
       [
         _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
-          _vm._v("Danh sách khách hàng")
+          _vm._v(
+            "\n                        Danh sách khách hàng\n                    "
+          )
         ])
       ]
     )
@@ -52753,7 +53014,7 @@ var render = function() {
         _c(
           "router-link",
           { staticClass: "btn btn-primary", attrs: { to: "/employee" } },
-          [_vm._v("Xem nhân viên\n    ")]
+          [_vm._v("Xem nhân viên\n        ")]
         )
       ],
       1
@@ -52817,9 +53078,9 @@ var render = function() {
                             _vm.errors.name
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.name[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -52859,9 +53120,9 @@ var render = function() {
                             _vm.errors.email
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.email[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -52905,9 +53166,9 @@ var render = function() {
                             _vm.errors.address
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.address[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -52927,7 +53188,7 @@ var render = function() {
                               attrs: {
                                 type: "text",
                                 id: "exampleInputFirstName",
-                                placeholder: "Mức lương"
+                                placeholder: "Mức lương theo giờ"
                               },
                               domProps: { value: _vm.form.sallery },
                               on: {
@@ -52947,9 +53208,9 @@ var render = function() {
                             _vm.errors.sallery
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.sallery[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -52966,7 +53227,8 @@ var render = function() {
                                   name: "model",
                                   rawName: "v-model",
                                   value: _vm.form.joining_date,
-                                  expression: "form.joining_date"
+                                  expression:
+                                    "\n                                                        form.joining_date\n                                                    "
                                 }
                               ],
                               staticClass: "form-control",
@@ -52993,9 +53255,9 @@ var render = function() {
                             _vm.errors.joining_date
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.joining_date[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53007,33 +53269,37 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.form.nid,
-                                  expression: "form.nid"
+                                  value: _vm.form.password,
+                                  expression: "form.password"
                                 }
                               ],
                               staticClass: "form-control",
                               attrs: {
-                                type: "text",
+                                type: "password",
                                 id: "exampleInputFirstName",
-                                placeholder: "Tên gọi"
+                                placeholder: "Mật khẩu khi cấp tài khoản"
                               },
-                              domProps: { value: _vm.form.nid },
+                              domProps: { value: _vm.form.password },
                               on: {
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
-                                  _vm.$set(_vm.form, "nid", $event.target.value)
+                                  _vm.$set(
+                                    _vm.form,
+                                    "password",
+                                    $event.target.value
+                                  )
                                 }
                               }
                             }),
                             _vm._v(" "),
-                            _vm.errors.nid
+                            _vm.errors.password
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
-                                      _vm._s(_vm.errors.nid[0]) +
-                                      "\n                        "
+                                    "\n                                                    " +
+                                      _vm._s(_vm.errors.password[0]) +
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53077,9 +53343,9 @@ var render = function() {
                             _vm.errors.phone
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.phone[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53101,9 +53367,9 @@ var render = function() {
                             _vm.errors.photo
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.photo[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e(),
@@ -53152,7 +53418,9 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "text-center" }, [
       _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
-        _vm._v("Thêm nhân viên")
+        _vm._v(
+          "\n                                        Thêm nhân viên\n                                    "
+        )
       ])
     ])
   },
@@ -53164,7 +53432,11 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-primary btn-block", attrs: { type: "submit" } },
-        [_vm._v("\n                      Lưu\n                    ")]
+        [
+          _vm._v(
+            "\n                                            Lưu\n                                        "
+          )
+        ]
       )
     ])
   }
@@ -53198,7 +53470,7 @@ var render = function() {
         _c(
           "router-link",
           { staticClass: "btn btn-primary", attrs: { to: "/employee" } },
-          [_vm._v("Xem nhân viên\n    ")]
+          [_vm._v("Xem nhân viên\n        ")]
         )
       ],
       1
@@ -53262,9 +53534,9 @@ var render = function() {
                             _vm.errors.name
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.name[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53304,9 +53576,9 @@ var render = function() {
                             _vm.errors.email
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.email[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53350,9 +53622,9 @@ var render = function() {
                             _vm.errors.address
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.address[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53392,9 +53664,9 @@ var render = function() {
                             _vm.errors.sallery
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.sallery[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53411,7 +53683,8 @@ var render = function() {
                                   name: "model",
                                   rawName: "v-model",
                                   value: _vm.form.joining_date,
-                                  expression: "form.joining_date"
+                                  expression:
+                                    "\n                                                        form.joining_date\n                                                    "
                                 }
                               ],
                               staticClass: "form-control",
@@ -53438,9 +53711,9 @@ var render = function() {
                             _vm.errors.joining_date
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.joining_date[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53452,33 +53725,37 @@ var render = function() {
                                 {
                                   name: "model",
                                   rawName: "v-model",
-                                  value: _vm.form.nid,
-                                  expression: "form.nid"
+                                  value: _vm.form.password,
+                                  expression: "form.password"
                                 }
                               ],
                               staticClass: "form-control",
                               attrs: {
-                                type: "text",
+                                type: "password",
                                 id: "exampleInputFirstName",
-                                placeholder: "Tên gọi"
+                                placeholder: "Mật khẩu khi cấp tài khoản"
                               },
-                              domProps: { value: _vm.form.nid },
+                              domProps: { value: _vm.form.password },
                               on: {
                                 input: function($event) {
                                   if ($event.target.composing) {
                                     return
                                   }
-                                  _vm.$set(_vm.form, "nid", $event.target.value)
+                                  _vm.$set(
+                                    _vm.form,
+                                    "password",
+                                    $event.target.value
+                                  )
                                 }
                               }
                             }),
                             _vm._v(" "),
-                            _vm.errors.nid
+                            _vm.errors.password
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
-                                      _vm._s(_vm.errors.nid[0]) +
-                                      "\n                        "
+                                    "\n                                                    " +
+                                      _vm._s(_vm.errors.password[0]) +
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53522,9 +53799,9 @@ var render = function() {
                             _vm.errors.phone
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.phone[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -53546,9 +53823,9 @@ var render = function() {
                             _vm.errors.photo
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    "\n                          " +
+                                    "\n                                                    " +
                                       _vm._s(_vm.errors.photo[0]) +
-                                      "\n                        "
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e(),
@@ -53598,7 +53875,7 @@ var staticRenderFns = [
     return _c("div", { staticClass: "text-center" }, [
       _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
         _vm._v(
-          "\n                    Chỉnh sửa thông tin nhân viên\n                  "
+          "\n                                        Chỉnh sửa thông tin nhân viên\n                                    "
         )
       ])
     ])
@@ -53611,7 +53888,11 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-primary btn-block", attrs: { type: "submit" } },
-        [_vm._v("\n                      Lưu\n                    ")]
+        [
+          _vm._v(
+            "\n                                            Lưu\n                                        "
+          )
+        ]
       )
     ])
   }
@@ -53645,7 +53926,7 @@ var render = function() {
         _c(
           "router-link",
           { staticClass: "btn btn-primary", attrs: { to: "/store-employee" } },
-          [_vm._v("Xem nhân viên\n    ")]
+          [_vm._v("Xem nhân viên\n        ")]
         )
       ],
       1
@@ -53768,11 +54049,13 @@ var staticRenderFns = [
       "div",
       {
         staticClass:
-          "\n            card-header\n            py-3\n            d-flex\n            flex-row\n            align-items-center\n            justify-content-between\n          "
+          "\n          card-header\n          py-3\n          d-flex\n          flex-row\n          align-items-center\n          justify-content-between\n        "
       },
       [
         _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
-          _vm._v("\n            Danh sách nhân viên\n          ")
+          _vm._v(
+            "\n                        Danh sách nhân viên\n                    "
+          )
         ])
       ]
     )
@@ -54094,7 +54377,9 @@ var render = function() {
                             _vm.errors.details
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    " " + _vm._s(_vm.errors.details[0]) + " "
+                                    "\n                                                    " +
+                                      _vm._s(_vm.errors.details[0]) +
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -54138,7 +54423,9 @@ var render = function() {
                             _vm.errors.amount
                               ? _c("small", { staticClass: "text-danger" }, [
                                   _vm._v(
-                                    " " + _vm._s(_vm.errors.amount[0]) + " "
+                                    "\n                                                    " +
+                                      _vm._s(_vm.errors.amount[0]) +
+                                      "\n                                                "
                                   )
                                 ])
                               : _vm._e()
@@ -54171,7 +54458,9 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "text-center" }, [
       _c("h1", { staticClass: "h4 text-gray-900 mb-4" }, [
-        _vm._v(" Chỉnh sửa thông tin chi phí")
+        _vm._v(
+          "\n                                        Chỉnh sửa thông tin chi phí\n                                    "
+        )
       ])
     ])
   },
@@ -54199,7 +54488,11 @@ var staticRenderFns = [
       _c(
         "button",
         { staticClass: "btn btn-primary btn-block", attrs: { type: "submit" } },
-        [_vm._v("Lưu")]
+        [
+          _vm._v(
+            "\n                                            Lưu\n                                        "
+          )
+        ]
       )
     ])
   }
@@ -54282,13 +54575,11 @@ var render = function() {
                   "tbody",
                   _vm._l(_vm.filtersearch, function(expense) {
                     return _c("tr", { key: expense.id }, [
-                      _c("td", [_vm._v(" " + _vm._s(expense.details) + " ")]),
+                      _c("td", [_vm._v(_vm._s(expense.details))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(" " + _vm._s(expense.amount) + " ")]),
+                      _c("td", [_vm._v(_vm._s(expense.amount))]),
                       _vm._v(" "),
-                      _c("td", [
-                        _vm._v(" " + _vm._s(expense.expense_date) + " ")
-                      ]),
+                      _c("td", [_vm._v(_vm._s(expense.expense_date))]),
                       _vm._v(" "),
                       _c(
                         "td",
@@ -54354,7 +54645,9 @@ var staticRenderFns = [
       },
       [
         _c("h6", { staticClass: "m-0 font-weight-bold text-primary" }, [
-          _vm._v("Danh sách chi phí")
+          _vm._v(
+            "\n                        Danh sách chi phí\n                    "
+          )
         ])
       ]
     )
@@ -54367,7 +54660,7 @@ var staticRenderFns = [
       _c("tr", [
         _c("th", [_vm._v("Tên chi phí")]),
         _vm._v(" "),
-        _c("th", [_vm._v("Tổng chi phí ")]),
+        _c("th", [_vm._v("Tổng chi phí")]),
         _vm._v(" "),
         _c("th", [_vm._v("Ngày")]),
         _vm._v(" "),

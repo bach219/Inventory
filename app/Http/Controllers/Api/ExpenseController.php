@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Model\Expense;
 use DB;
+use App\Http\Requests\ExpenseRequest;
 
 class ExpenseController extends Controller
 {
@@ -28,12 +29,12 @@ class ExpenseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ExpenseRequest $request)
     {
-        $validateData = $request->validate([
-         'details' => 'required',
-         'amount' => 'required',
-        ]);
+      //  $validateData = $request->validate([
+       //  'details' => 'required',
+         //'amount' => 'required',
+       // ]);
 
          $expense = new Expense;
          $expense->details = $request->details;
@@ -64,7 +65,7 @@ class ExpenseController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(ExpenseRequest $request, $id)
     {
         $data = array();
         $data['details'] =  $request->details;

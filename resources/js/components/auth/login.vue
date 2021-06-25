@@ -44,7 +44,7 @@
                                                 {{ errors.password[0] }}
                                             </small>
                                         </div>
-                                        <div class="form-group">
+                                        <!-- <div class="form-group">
                                             <div
                                                 class="custom-control custom-checkbox small"
                                                 style="line-height: 1.5rem;"
@@ -60,7 +60,7 @@
                                                     >Lưu đăng nhập</label
                                                 >
                                             </div>
-                                        </div>
+                                        </div> -->
                                         <div class="form-group">
                                             <button
                                                 type="submit"
@@ -99,6 +99,20 @@
 <script type="text/javascript">
 export default {
     created() {
+        // let level = "info";
+        // let message = "message";
+
+        // // let errToastr = () => toastr.error("Oops! An error encountered");
+
+        // axios
+        //     .post("/api/push", { message, level })
+        //     .then(r =>
+        //         r.data.status
+        //             ? toastr.success("Log dispatch successful")
+        //             : toastr.error("Oops! An error encountered")
+        //     )
+        //     .catch(errToastr);
+
         if (User.loggedIn()) {
             this.$router.push({ name: "home" });
         }
@@ -110,29 +124,55 @@ export default {
                 email: null,
                 password: null
             },
-            errors: {}
+            errors: {},
+            errorAlert: 0
         };
     },
     methods: {
         login() {
-            axios
-                .post("/api/auth/login", this.form)
-                .then(res => {
-                    User.responseAfterLogin(res);
-                    Toast.fire({
-                        icon: "success",
-                        title: "Đăng nhập thành công!"
-                    });
-                    this.$router.push({ name: "home" });
-                })
+            let level = "info";
+            let message = "message";
 
-                .catch(error => (this.errors = error.response.data.errors))
-                .catch(
-                    Toast.fire({
-                        icon: "warning",
-                        title: "Email hoặc mật khẩu không đúng!"
-                    })
-                );
+            let errToastr = () => toastr.error("Oops! An error encountered");
+
+            axios
+                .post("/api/push", { message, level })
+                .then(r =>
+                    r.data.status
+                        ? toastr.success("Log dispatch successful")
+                        : toastr.error("Oops! An error encountered")
+                )
+                .catch(errToastr);
+
+            // return new Promise((resolve, reject) => {
+            //     axios
+            //         .post("/api/auth/login", this.form)
+            //         .then(res => {
+            //             resolve(res);
+            //             console.log(res);
+            //             User.responseAfterLogin(res);
+            //             Toast.fire({
+            //                 icon: "success",
+            //                 title: "Đăng nhập thành công!"
+            //             });
+            //             this.$router.push({ name: "home" });
+            //         })
+
+            //         .catch(error => {
+            //             reject(error);
+            //             this.errors = error.response.data.errors;
+            //             Toast.fire({
+            //                 icon: "error",
+            //                 title: "Email hoặc mật khẩu không đúng!"
+            //             });
+            //         })
+            //         .catch(
+            //             Toast.fire({
+            //                 icon: "info",
+            //                 title: "Đang xử lý..."
+            //             })
+            //         );
+            // });
         }
     }
 };

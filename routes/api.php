@@ -65,9 +65,17 @@ Route::Get('/today/expense', 'Api\PosController@TodayExpense');
 Route::Get('/today/stockout', 'Api\PosController@Stockout');
 
 
+Route::post('/push', 'LogController')->name('log-message');
+
+
 //Android
 Route::post('employee/login', 'EmployeeAuthController@login');
-Route::middleware(['assign.guard:employees','jwt.auth'])->group( function ($router) {
+Route::group([
+
+    'middleware' => ['assign.guard:employees','jwt.auth'],
+    'prefix' => 'auth'
+
+], function ($router) {
     // Route::post('employee/login', 'EmployeeAuthController@login');
     Route::post('employee/logout', 'EmployeeAuthController@logout');
     Route::post('employee/refresh', 'EmployeeAuthController@refresh');

@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Model\Employee;
 use Image;
 use DB;
+use App\Http\Requests\EmployeeRequest;
+use Illuminate\Support\Facades\Hash;
 
 class EmployeeController extends Controller 
 {
@@ -28,14 +30,15 @@ class EmployeeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(EmployeeRequest $request)
     {
-        $validateData = $request->validate([
-         'name' => 'required|unique:employees|max:255',
-         'email' => 'required',
-         'phone' => 'required|unique:employees',
-
-        ]);
+      //   $validateData = $request->validate([
+      //    'name' => 'required|unique:employees|max:255',
+      //    'email' => 'required',
+      //    'phone' => 'required|unique:employees',
+      //    'nid' => 'required',
+      //    'sallery' => 'required',
+      //   ]);
 
       if ($request->photo) {
          $position = strpos($request->photo, ';');
@@ -54,7 +57,9 @@ class EmployeeController extends Controller
          $employee->phone = $request->phone;
          $employee->sallery = $request->sallery;
          $employee->address = $request->address;
-         $employee->nid = $request->nid;
+         if(!empty($request->password) || $request->password != "")
+            $employee->password = Hash::make($request->password);
+         // $employee->nid = $request->nid;
          $employee->joining_date = $request->joining_date;
          $employee->photo = $image_url;
          $employee->save(); 
@@ -65,7 +70,9 @@ class EmployeeController extends Controller
          $employee->phone = $request->phone;
          $employee->sallery = $request->sallery;
          $employee->address = $request->address;
-         $employee->nid = $request->nid;
+         if(!empty($request->password) || $request->password != "")
+            $employee->password = Hash::make($request->password);
+         // $employee->nid = $request->nid;
          $employee->joining_date = $request->joining_date;
          
          $employee->save(); 
@@ -83,7 +90,7 @@ class EmployeeController extends Controller
      */
     public function show($id)
     {
-       $employee = DB::table('employees')->where('id',$id)->first();
+       $employee = DB::table('employees')->select('id','name','phone','email','address','sallery','photo','joining_date')->where('id',$id)->first();
        return response()->json($employee);
     }
 
@@ -96,42 +103,44 @@ class EmployeeController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(EmployeeRequest $request, $id)
     {
-        $data = array();
-        $data['name'] = $request->name;
-        $data['email'] = $request->email;
-        $data['phone'] = $request->phone;
-        $data['sallery'] = $request->sallery;
-        $data['address'] = $request->address;
-        $data['nid'] = $request->nid;
-        $data['joining_date'] = $request->joining_date;
-        $image = $request->newphoto;
+         $data = array();
+         $data['name'] = $request->name;
+         $data['email'] = $request->email;
+         $data['phone'] = $request->phone;
+         $data['sallery'] = $request->sallery;
+         $data['address'] = $request->address;
+         if(!empty($request->password) || $request->password != "")
+            $data['password'] = Hash::make($request->password);
+      //   $data['nid'] = $request->nid;
+         $data['joining_date'] = $request->joining_date;
+         $image = $request->newphoto;
 
-        if ($image) {
-         $position = strpos($image, ';');
-         $sub = substr($image, 0, $position);
-         $ext = explode('/', $sub)[1];
+         if ($image) {
+            $position = strpos($image, ';');
+            $sub = substr($image, 0, $position);
+            $ext = explode('/', $sub)[1];
 
-         $name = time().".".$ext;
-         $img = Image::make($image)->resize(240,200);
-         $upload_path = 'backend/employee/';
-         $image_url = $upload_path.$name;
-         $success = $img->save($image_url);
-         
-         if ($success) {
-            $data['photo'] = $image_url;
-            $img = DB::table('employees')->where('id',$id)->first();
-            $image_path = $img->photo;
-            $done = unlink($image_path);
-            $user  = DB::table('employees')->where('id',$id)->update($data);
+            $name = time().".".$ext;
+            $img = Image::make($image)->resize(240,200);
+            $upload_path = 'backend/employee/';
+            $image_url = $upload_path.$name;
+            $success = $img->save($image_url);
+            
+            if ($success) {
+               $data['photo'] = $image_url;
+               $img = DB::table('employees')->where('id',$id)->first();
+               $image_path = $img->photo;
+               $done = unlink($image_path);
+               $user  = DB::table('employees')->where('id',$id)->update($data);
+            }
+            
+         }else{
+               $oldphoto = $request->photo;
+               $data['photo'] = $oldphoto;
+               $user = DB::table('employees')->where('id',$id)->update($data);
          }
-          
-        }else{
-            $oldphoto = $request->photo;
-            $data['photo'] = $oldphoto;
-            $user = DB::table('employees')->where('id',$id)->update($data);
-        }
 
     }
 
@@ -143,14 +152,14 @@ class EmployeeController extends Controller
      */
     public function destroy($id)
     {
-       $employee = DB::table('employees')->where('id',$id)->first();
-       $photo = $employee->photo;
-       if ($photo) {
-         unlink($photo);
-         DB::table('employees')->where('id',$id)->delete();
-       }else{
-        DB::table('employees')->where('id',$id)->delete();
-       }
+         $employee = DB::table('employees')->where('id',$id)->first();
+         $photo = $employee->photo;
+         if ($photo) {
+            unlink($photo);
+            DB::table('employees')->where('id',$id)->delete();
+         }else{
+            DB::table('employees')->where('id',$id)->delete();
+         }
     }
 
  

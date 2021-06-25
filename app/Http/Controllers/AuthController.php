@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use DB;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\SignUpRequest;
 
 class AuthController extends Controller
 {
@@ -19,6 +20,7 @@ class AuthController extends Controller
     public function __construct()
     {
         $this->middleware('JWT', ['except' => ['login','signup']]);
+        Auth::shouldUse('api');
     }
 
     // 
@@ -66,7 +68,7 @@ class AuthController extends Controller
     {
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'Đăng xuất thành công']);
     }
 
     /**
@@ -81,24 +83,21 @@ class AuthController extends Controller
 
 
 
-    public function signup(Request $request){
-     
-     $validateData = $request->validate([
-       'email' => 'required|unique:users|max:255',
-       'name' => 'required',
-       'password' => 'required|min:6|confirmed'
+    public function signup(SignUpRequest $request){
 
-     ]);
+        $data = array();
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['password'] = Hash::make($request->password);
+        DB::table('users')->insert($data);
 
-     $data = array();
-     $data['name'] = $request->name;
-     $data['email'] = $request->email;
-     $data['password'] = Hash::make($request->password);
-     DB::table('users')->insert($data);
+        $credentials = request(['email', 'password']);
 
-     return $this->login($request);
+        if (! $token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Xảy ra lỗi khi đăng ký tài khoản'], 401);
+        }
 
-
+        return $this->respondWithToken($token);
 
     }
 

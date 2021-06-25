@@ -21,6 +21,12 @@
                                                 placeholder="Họ tên"
                                                 v-model="form.name"
                                             />
+                                            <small
+                                                class="text-danger"
+                                                v-if="errors.name"
+                                            >
+                                                {{ errors.name[0] }}
+                                            </small>
                                         </div>
 
                                         <div class="form-group">
@@ -32,6 +38,12 @@
                                                 placeholder="Địa chỉ email"
                                                 v-model="form.email"
                                             />
+                                            <small
+                                                class="text-danger"
+                                                v-if="errors.email"
+                                            >
+                                                {{ errors.email[0] }}
+                                            </small>
                                         </div>
                                         <div class="form-group">
                                             <input
@@ -41,6 +53,12 @@
                                                 placeholder="Mật khẩu"
                                                 v-model="form.password"
                                             />
+                                            <small
+                                                class="text-danger"
+                                                v-if="errors.password"
+                                            >
+                                                {{ errors.password[0] }}
+                                            </small>
                                         </div>
 
                                         <div class="form-group">
@@ -53,6 +71,17 @@
                                                     form.password_confirmation
                                                 "
                                             />
+                                            <small
+                                                class="text-danger"
+                                                v-if="
+                                                    errors.password_confirmation
+                                                "
+                                            >
+                                                {{
+                                                    errors
+                                                        .password_confirmation[0]
+                                                }}
+                                            </small>
                                         </div>
                                         <div class="form-group">
                                             <button
@@ -96,25 +125,43 @@ export default {
                 name: null,
                 email: null,
                 password: null,
-                confirm_password: null
+                password_confirmation: null
             },
             errors: {}
         };
     },
     methods: {
         signup() {
-            axios
-                .post("/api/auth/signup", this.form)
-                .then(res => {
-                    User.responseAfterLogin(res);
-                    Toast.fire({
-                        icon: "success",
-                        title: "Đăng ký thành công!"
-                    });
-                    this.$router.push({ name: "home" });
-                })
+            return new Promise((resolve, reject) => {
+                axios
+                    .post("/api/auth/signup", this.form)
+                    .then(res => {
+                        resolve(res);
+                        console.log(res);
+                        User.responseAfterLogin(res);
+                        Toast.fire({
+                            icon: "success",
+                            title: "Đăng ký tài khoản thành công!"
+                        });
+                        this.$router.push({ name: "home" });
+                    })
 
-                .catch(error => (this.errors = error.response.data.errors));
+                    .catch(error => {
+                        reject(error);
+                        this.errors = error.response.data.errors;
+                        // console.log(error.response);
+                        Toast.fire({
+                            icon: "error",
+                            title: "Đã xảy ra lỗi khi đăng ký!"
+                        });
+                    })
+                    .catch(
+                        Toast.fire({
+                            icon: "info",
+                            title: "Đang xử lý..."
+                        })
+                    );
+            });
         }
     }
 };

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Model\Supplier;
 use Image;
 use DB;
+use App\Http\Requests\SupplierRequest;
 
 class SupplierController extends Controller
 {
@@ -28,14 +29,14 @@ class SupplierController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(SupplierRequest $request)
     {
-        $validateData = $request->validate([
-         'name' => 'required|unique:suppliers|max:255',
-         'email' => 'required',
-         'phone' => 'required|unique:suppliers',
+       // $validateData = $request->validate([
+        // 'name' => 'required|unique:suppliers|max:255',
+       //  'email' => 'required',
+        //'phone' => 'required|unique:suppliers',
 
-        ]);
+      //  ]);
 
         if ($request->photo) {
          $position = strpos($request->photo, ';');
@@ -91,7 +92,7 @@ class SupplierController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(SupplierRequest $request, $id)
     {
         $data = array();
         $data['name'] = $request->name;
