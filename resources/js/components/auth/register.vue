@@ -1,113 +1,138 @@
-<template>
-    <div>
-        <div class="row justify-content-center">
-            <div class="col-xl-10 col-lg-12 col-md-9">
-                <div class="card shadow-sm my-5">
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <div class="login-form">
-                                    <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4">
-                                            ĐĂNG KÝ
-                                        </h1>
+<template id="login">
+    <div class="p-fixed d-flex text-center">
+        <!-- Container-fluid starts -->
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-10">
+                    <!-- Authentication card start -->
+                    <div
+                        class="signup-card card-block auth-body mr-auto ml-auto"
+                    >
+                        <form
+                            class="md-float-material user"
+                            @submit.prevent="signup"
+                        >
+                            <div class="text-center">
+                                <img
+                                    src="backend/assets/images/auth/logo-dark.png"
+                                    alt="logo.png"
+                                />
+                            </div>
+                            <div class="auth-box">
+                                <div class="row m-b-20">
+                                    <div class="col-md-12">
+                                        <h3 class="text-center txt-primary">
+                                            Đăng ký
+                                        </h3>
                                     </div>
-                                    <form class="user" @submit.prevent="signup">
-                                        <div class="form-group">
-                                            <input
-                                                type="text"
-                                                class="form-control"
-                                                id="exampleInputFirstName"
-                                                placeholder="Họ tên"
-                                                v-model="form.name"
-                                            />
-                                            <small
-                                                class="text-danger"
-                                                v-if="errors.name"
-                                            >
-                                                {{ errors.name[0] }}
-                                            </small>
-                                        </div>
+                                </div>
+                                <hr />
+                                <div class="input-group">
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="exampleInputFirstName"
+                                        placeholder="Họ tên"
+                                        v-model="form.name"
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <small
+                                        class="text-danger md-line"
+                                        v-if="errors.name"
+                                    >
+                                        {{ errors.name[0] }}
+                                    </small>
+                                </div>
 
-                                        <div class="form-group">
-                                            <input
-                                                type="email"
-                                                class="form-control"
-                                                id="exampleInputEmail"
-                                                aria-describedby="emailHelp"
-                                                placeholder="Địa chỉ email"
-                                                v-model="form.email"
-                                            />
-                                            <small
-                                                class="text-danger"
-                                                v-if="errors.email"
-                                            >
-                                                {{ errors.email[0] }}
-                                            </small>
-                                        </div>
-                                        <div class="form-group">
-                                            <input
-                                                type="password"
-                                                class="form-control"
-                                                id="exampleInputPassword"
-                                                placeholder="Mật khẩu"
-                                                v-model="form.password"
-                                            />
-                                            <small
-                                                class="text-danger"
-                                                v-if="errors.password"
-                                            >
-                                                {{ errors.password[0] }}
-                                            </small>
-                                        </div>
+                                <div class="input-group">
+                                    <input
+                                        type="email"
+                                        class="form-control"
+                                        id="exampleInputEmail"
+                                        aria-describedby="emailHelp"
+                                        placeholder="Địa chỉ email"
+                                        v-model="form.email"
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <small
+                                        class="text-danger md-line"
+                                        v-if="errors.email"
+                                    >
+                                        {{ errors.email[0] }}
+                                    </small>
+                                </div>
 
-                                        <div class="form-group">
-                                            <input
-                                                type="password"
-                                                class="form-control"
-                                                id="exampleInputPasswordRepeat"
-                                                placeholder="Nhập lại mật khẩu"
-                                                v-model="
-                                                    form.password_confirmation
-                                                "
-                                            />
-                                            <small
-                                                class="text-danger"
-                                                v-if="
-                                                    errors.password_confirmation
-                                                "
-                                            >
-                                                {{
-                                                    errors
-                                                        .password_confirmation[0]
-                                                }}
-                                            </small>
-                                        </div>
-                                        <div class="form-group">
-                                            <button
-                                                type="submit"
-                                                class="btn btn-primary btn-block"
-                                            >
-                                                Đăng ký
-                                            </button>
-                                        </div>
-                                    </form>
-                                    <hr />
-                                    <div class="text-center">
-                                        <router-link
-                                            to="/"
-                                            class="font-weight-bold small"
-                                            >Đã có tài khoản?</router-link
+                                <div class="input-group">
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="exampleInputPassword"
+                                        placeholder="Mật khẩu"
+                                        v-model="form.password"
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <small
+                                        class="text-danger md-line"
+                                        v-if="errors.password"
+                                    >
+                                        {{ errors.password[0] }}
+                                    </small>
+                                </div>
+
+                                <div class="input-group">
+                                    <input
+                                        type="password"
+                                        class="form-control"
+                                        id="exampleInputPasswordRepeat"
+                                        placeholder="Nhập lại mật khẩu"
+                                        v-model="form.password_confirmation"
+                                    />
+                                </div>
+                                <div class="input-group">
+                                    <small
+                                        class="text-danger md-line"
+                                        v-if="errors.password_confirmation"
+                                    >
+                                        {{ errors.password_confirmation[0] }}
+                                    </small>
+                                </div>
+
+                                <div class="row m-t-30">
+                                    <div class="col-md-12">
+                                        <button
+                                            type="submit"
+                                            class="btn btn-primary btn-md btn-block waves-effect text-center m-b-20"
                                         >
+                                            Đăng ký
+                                        </button>
                                     </div>
-                                    <div class="text-center"></div>
+                                </div>
+                                <hr />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="text-center">
+                                            <router-link
+                                                to="/"
+                                                class="font-weight-bold small"
+                                                >Đã có tài khoản</router-link
+                                            >
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
+                        <!-- end of form -->
                     </div>
+                    <!-- Authentication card end -->
                 </div>
+                <!-- end of col-sm-12 -->
             </div>
+            <!-- end of row -->
         </div>
+        <!-- end of container-fluid -->
     </div>
 </template>
 
@@ -167,4 +192,13 @@ export default {
 };
 </script>
 
-<style type="text/css"></style>
+<style type="text/css">
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+}
+.pcoded-main-container {
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+</style>

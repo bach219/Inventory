@@ -15,6 +15,7 @@ Route::group([
     Route::post('me', 'AuthController@me');
 
 });
+Route::post('/forget', 'SendMailController@sendEmail');
 
 Route::apiResource('/employee', 'Api\EmployeeController');
 Route::apiResource('/supplier', 'Api\SupplierController');
@@ -22,6 +23,7 @@ Route::apiResource('/category', 'Api\CategoryController');
 Route::apiResource('/product', 'Api\ProductController');
 Route::apiResource('/expense', 'Api\ExpenseController');
 Route::apiResource('/customer', 'Api\CustomerController');
+Route::apiResource('/position', 'Api\PositionController');
 
 Route::Post('/salary/paid/{id}', 'Api\SalaryController@Paid');
 Route::Get('/salary', 'Api\SalaryController@AllSalary');
@@ -81,5 +83,7 @@ Route::group([
     Route::post('employee/refresh', 'EmployeeAuthController@refresh');
     Route::post('employee/me', 'EmployeeAuthController@me');
 });
+
+
 
 

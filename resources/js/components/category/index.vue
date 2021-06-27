@@ -1,5 +1,10 @@
 <template>
     <div>
+        <div class="row">
+            <router-link to="/store-category" class="btn btn-primary"
+                >Thêm nhóm món</router-link
+            >
+        </div>
         <br />
         <input
             type="text"
@@ -22,41 +27,48 @@
                             Danh sách nhóm món
                         </h6>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table align-items-center table-flush">
-                            <thead class="thead-light">
-                                <tr>
-                                    <th>Tên nhóm món</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr
-                                    v-for="category in filtersearch"
-                                    :key="category.id"
-                                >
-                                    <td>{{ category.category_name }}</td>
+                    <div class="card-block table-border-style">
+                        <div class="table-responsive">
+                            <table class="table ">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Tên nhóm món</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr
+                                        v-for="category in filtersearch"
+                                        :key="category.id"
+                                    >
+                                        <td>{{ category.category_name }}</td>
 
-                                    <td>
-                                        <router-link
-                                            :to="{
-                                                name: 'edit-category',
-                                                params: { id: category.id }
-                                            }"
-                                            class="btn btn-sm btn-primary"
-                                            >Sửa</router-link
-                                        >
+                                        <td>
+                                            <router-link
+                                                :to="{
+                                                    name: 'edit-category',
+                                                    params: { id: category.id }
+                                                }"
+                                                class="btn btn-sm btn-primary"
+                                                >Sửa</router-link
+                                            >
 
-                                        <a
-                                            @click="deleteCategory(category.id)"
-                                            class="btn btn-sm btn-danger"
-                                            ><font color="#ffffff">Xóa</font></a
-                                        >
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                            <a
+                                                @click="
+                                                    deleteCategory(category.id)
+                                                "
+                                                class="btn btn-sm btn-danger"
+                                                ><font color="#ffffff"
+                                                    >Xóa</font
+                                                ></a
+                                            >
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+
                     <div class="card-footer"></div>
                 </div>
             </div>

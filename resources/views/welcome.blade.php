@@ -9,504 +9,590 @@
     <meta name="author" content="">
     <link href="{{ asset('backend/img/logo/logo.png') }}" rel="icon">
     <title>Quản lý cửa hàng</title>
-    <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}">
+    {{-- <link rel="stylesheet" type="text/css" href="{{ asset('css/app.css') }}"> --}}
 
-    <link href="{{ asset('backend/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('backend/vendor/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('backend/css/ruang-admin.min.css') }}" rel="stylesheet">
+    <!-- Favicon icon -->
+    <link rel="icon" href="{{ asset('backend/assets/images/favicon.ico') }}" type="image/x-icon">
+    <!-- Google font-->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600" rel="stylesheet">
+    <!-- Required Fremwork -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/bootstrap/css/bootstrap.min.css') }}">
+    <!-- themify-icons line icon -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/icon/themify-icons/themify-icons.css') }}">
+    <!-- ico font -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/icon/icofont/css/icofont.css') }}">
+    <!-- Style.css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('backend/assets/css/jquery.mCustomScrollbar.css') }}">
+    <style>
+        .page-wrapper {
+            display: flex;
+            justify-content: center;
+        }
+
+        .pcoded-main-container {
+            margin-top: 0px;
+            /* margin-bottom: 0px; */
+        }
+
+        #topbar {
+            background-color: rgb(246, 247, 251);
+            position: absolute;
+        }
+
+    </style>
 </head>
 
 <body id="page-top">
-    <div id="app">
-
-
-        <div id="wrapper">
-
-            <!-- Sidebar -->
-            <nav id="sidebar"
-                v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true "
-                style="display:  none;">
-
-                <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-                    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
-                        <div class="sidebar-brand-icon">
-                            <img src="{{ asset('backend/img/logo/logo2.png') }}">
-                        </div>
-                        <div class="sidebar-brand-text mx-3">Quản lý quán</div>
-                    </a>
-                    <hr class="sidebar-divider my-0">
-                    <li class="nav-item active">
-                        <router-link class="nav-link" to="/home">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Thống kê</span>
-                        </router-link>
-                    </li>
-
-                    <li class="nav-item bg-info">
-                        <router-link class="nav-link" to="/pos">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>POS</span>
-                        </router-link>
-                    </li>
-
-                    <hr class="sidebar-divider">
-                    <div class="sidebar-heading">
-                        Chức năng
-                    </div>
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap"
-                            aria-expanded="true" aria-controls="collapseBootstrap">
-                            <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Nhân viên</span>
-                        </a>
-                        <div id="collapseBootstrap" class="collapse" aria-labelledby="headingBootstrap"
-                            data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <router-link class="collapse-item" to="/store-employee">Thêm nhân viên</router-link>
-                                <router-link class="collapse-item" to="/employee">Xem nhân viên</router-link>
-
-                            </div>
-                        </div>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap1"
-                            aria-expanded="true" aria-controls="collapseBootstrap1">
-                            <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Nhà cung cấp</span>
-                        </a>
-                        <div id="collapseBootstrap1" class="collapse" aria-labelledby="headingBootstrap"
-                            data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <router-link class="collapse-item" to="/store-supplier">Thêm nhà cung cấp</router-link>
-                                <router-link class="collapse-item" to="/supplier">Xem nhà cung cấp</router-link>
-
-                            </div>
-                        </div>
-                    </li>
-
-
-
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap2"
-                            aria-expanded="true" aria-controls="collapseBootstrap2">
-                            <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Nhóm món</span>
-                        </a>
-                        <div id="collapseBootstrap2" class="collapse" aria-labelledby="headingBootstrap"
-                            data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <router-link class="collapse-item" to="/store-category">Thêm nhóm món</router-link>
-                                <router-link class="collapse-item" to="/category">Xem nhóm món</router-link>
-
-                            </div>
-                        </div>
-                    </li>
-
-
-
-
-
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap3"
-                            aria-expanded="true" aria-controls="collapseBootstrap3">
-                            <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Món</span>
-                        </a>
-                        <div id="collapseBootstrap3" class="collapse" aria-labelledby="headingBootstrap"
-                            data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <router-link class="collapse-item" to="/store-product">Thêm món</router-link>
-                                <router-link class="collapse-item" to="/product">Xem món</router-link>
-
-                            </div>
-                        </div>
-                    </li>
-
-
-
-
-
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap4"
-                            aria-expanded="true" aria-controls="collapseBootstrap4">
-                            <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Chi phí</span>
-                        </a>
-                        <div id="collapseBootstrap4" class="collapse" aria-labelledby="headingBootstrap"
-                            data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <router-link class="collapse-item" to="/store-expense">Thêm chi phí</router-link>
-                                <router-link class="collapse-item" to="/expense">Xem chi phí</router-link>
-
-                            </div>
-                        </div>
-                    </li>
-
-
-
-
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap44"
-                            aria-expanded="true" aria-controls="collapseBootstrap44">
-                            <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Khách hàng</span>
-                        </a>
-                        <div id="collapseBootstrap44" class="collapse" aria-labelledby="headingBootstrap"
-                            data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <router-link class="collapse-item" to="/store-customer">Thêm khách hàng</router-link>
-                                <router-link class="collapse-item" to="/customer">Xem khách hàng</router-link>
-
-                            </div>
-                        </div>
-                    </li>
-
-
-
-
-
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap5"
-                            aria-expanded="true" aria-controls="collapseBootstrap5">
-                            <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Tính lương</span>
-                        </a>
-                        <div id="collapseBootstrap5" class="collapse" aria-labelledby="headingBootstrap"
-                            data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <router-link class="collapse-item" to="/given-salary">Thêm lương</router-link>
-                                <router-link class="collapse-item" to="/salary">Xem lương</router-link>
-
-                            </div>
-                        </div>
-                    </li>
-
-
-
-
-
-                    <li class="nav-item">
-                        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseBootstrap51"
-                            aria-expanded="true" aria-controls="collapseBootstrap51">
-                            <i class="far fa-fw fa-window-maximize"></i>
-                            <span>Hóa đơn</span>
-                        </a>
-                        <div id="collapseBootstrap51" class="collapse" aria-labelledby="headingBootstrap"
-                            data-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-
-                                <router-link class="collapse-item" to="/order">Hóa đơn hôm nay</router-link>
-                                <router-link class="collapse-item" to="/searchorder">Tìm kiếm</router-link>
-
-                            </div>
-                        </div>
-                    </li>
-
-
-
-
-
-
-
-
-
-                    <li class="nav-item">
-                        <router-link class="nav-link" to="/stock">
-                            <i class="fab fa-fw fa-wpforms"></i>
-                            <span>Kho hàng</span>
-                        </router-link>
-                    </li>
-
-                    {{-- <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTable" aria-expanded="true"
-          aria-controls="collapseTable">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Reports</span>
-        </a>
-        <div id="collapseTable" class="collapse" aria-labelledby="headingTable" data-parent="#accordionSidebar">
-          <div class="bg-white py-2 collapse-inner rounded">
-            
-            <a class="collapse-item" href="simple-tables.html">Report One</a>
-            <a class="collapse-item" href="datatables.html">Report Two</a>
-          </div>
-        </div>
-      </li> --}}
-
-                    <hr class="sidebar-divider">
-                    <div class="version" id="version-ruangadmin"></div>
-                </ul>
-                <!-- Sidebar -->
-            </nav>
-
-
-
-
-
-            <div id="content-wrapper" class="d-flex flex-column">
-                <div id="content">
-
-
-
-                    <!-- TopBar -->
-                    <nav class="navbar navbar-expand navbar-light bg-navbar topbar mb-4 static-top" id="topbar"
-                        v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true "
-                        style="display: none;">
-
-
-                        <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
-                            <i class="fa fa-bars"></i>
-                        </button>
-                        <ul class="navbar-nav ml-auto">
-                            {{-- <li class="nav-item dropdown no-arrow">
-                                <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-search fa-fw"></i>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                    aria-labelledby="searchDropdown">
-                                    <form class="navbar-search">
-                                        <div class="input-group">
-                                            <input type="text" class="form-control bg-light border-1 small"
-                                                placeholder="What do you want to look for?" aria-label="Search"
-                                                aria-describedby="basic-addon2" style="border-color: #3f51b5;">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-primary" type="button">
-                                                    <i class="fas fa-search fa-sm"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-bell fa-fw"></i>
-                                    <span class="badge badge-danger badge-counter">3+</span>
-                                </a>
-                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                    aria-labelledby="alertsDropdown">
-                                    <h6 class="dropdown-header">
-                                        Alerts Center
-                                    </h6>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="mr-3">
-                                            <div class="icon-circle bg-primary">
-                                                <i class="fas fa-file-alt text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500">December 12, 2019</div>
-                                            <span class="font-weight-bold">Báo cáo hàng tháng mới đã sẵn sàng để tải
-                                                xuống.</span>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="mr-3">
-                                            <div class="icon-circle bg-success">
-                                                <i class="fas fa-donate text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500">December 7, 2019</div>
-                                            $ 290,29 đã được gửi vào tài khoản của bạn!
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="mr-3">
-                                            <div class="icon-circle bg-warning">
-                                                <i class="fas fa-exclamation-triangle text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500">December 2, 2019</div>
-                                            Cảnh báo về Chi tiêu: Chúng tôi đã nhận thấy chi tiêu cao bất thường cho tài
-                                            khoản của bạn.
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item text-center small text-gray-500" href="#">Hiển thị tất cả
-                                        cảnh báo</a>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-envelope fa-fw"></i>
-                                    <span class="badge badge-warning badge-counter">2</span>
-                                </a>
-                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                    aria-labelledby="messagesDropdown">
-                                    <h6 class="dropdown-header">
-                                        Message Center
-                                    </h6>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            <img class="rounded-circle" src="{{ asset('backend/img/man.png') }}"
-                                                style="max-width: 60px" alt="">
-                                            <div class="status-indicator bg-success"></div>
-                                        </div>
-                                        <div class="font-weight-bold">
-                                            <div class="text-truncate">Hi there! I am wondering if you can help me with
-                                                a problem I've been
-                                                having.</div>
-                                            <div class="small text-gray-500">Udin Cilok · 58m</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item d-flex align-items-center" href="#">
-                                        <div class="dropdown-list-image mr-3">
-                                            <img class="rounded-circle" src="{{ asset('backend/img/girl.png') }}"
-                                                style="max-width: 60px" alt="">
-                                            <div class="status-indicator bg-default"></div>
-                                        </div>
-                                        <div>
-                                            <div class="text-truncate">Am I a good boy? The reason I ask is because
-                                                someone told me that people
-                                                say this to all dogs, even if they aren't good...</div>
-                                            <div class="small text-gray-500">Jaenab · 2w</div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item text-center small text-gray-500" href="#">Read More
-                                        Messages</a>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown no-arrow mx-1">
-                                <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i class="fas fa-tasks fa-fw"></i>
-                                    <span class="badge badge-success badge-counter">3</span>
-                                </a>
-                                <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                    aria-labelledby="messagesDropdown">
-                                    <h6 class="dropdown-header">
-                                        Task
-                                    </h6>
-                                    <a class="dropdown-item align-items-center" href="#">
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Design Button
-                                                <div class="small float-right"><b>50%</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-success" role="progressbar"
-                                                    style="width: 50%" aria-valuenow="50" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item align-items-center" href="#">
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Make Beautiful Transitions
-                                                <div class="small float-right"><b>30%</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-warning" role="progressbar"
-                                                    style="width: 30%" aria-valuenow="30" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item align-items-center" href="#">
-                                        <div class="mb-3">
-                                            <div class="small text-gray-500">Create Pie Chart
-                                                <div class="small float-right"><b>75%</b></div>
-                                            </div>
-                                            <div class="progress" style="height: 12px;">
-                                                <div class="progress-bar bg-danger" role="progressbar"
-                                                    style="width: 75%" aria-valuenow="75" aria-valuemin="0"
-                                                    aria-valuemax="100"></div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    <a class="dropdown-item text-center small text-gray-500" href="#">View All Taks</a>
-                                </div>
-                            </li> --}}
-                            <div class="topbar-divider d-none d-sm-block"></div>
-                            <li class="nav-item dropdown no-arrow">
-                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <img class="img-profile rounded-circle" src="{{ asset('backend/img/user.png') }}"
-                                        style="max-width: 60px">
-                                    <router-link to="/logout" class="ml-2 d-none d-lg-inline text-white small">Đăng xuất
-                                    </router-link>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                    aria-labelledby="userDropdown">
-                                    {{-- <a class="dropdown-item" href="#">
-                                        <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Profile
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Settings
-                                    </a>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Activity Log
-                                    </a>
-                                    <div class="dropdown-divider"></div> --}}
-                                    <a class="dropdown-item" href="login.html">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        <router-link to="/logout" class="ml-2 d-none d-lg-inline text-white small">
-                                            Đăng xuất</router-link>
-                                    </a>
-                                </div>
-                            </li>
-                        </ul>
-                    </nav>
-                    <!-- Topbar -->
-
-                    <!-- Container Fluid-->
-                    <div class="container-fluid" id="container-wrapper">
-                        <router-view></router-view>
-                    </div>
-                    <!---Container Fluid-->
+    <!-- Pre-loader start -->
+    <div class="theme-loader">
+        <div class="ball-scale">
+            <div class='contain'>
+                <div class="ring">
+                    <div class="frame"></div>
                 </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
 
-
-
-
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
+                <div class="ring">
+                    <div class="frame"></div>
+                </div>
             </div>
-
         </div>
-
     </div>
 
-    <!-- Scroll to top -->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-    <script src="{{ asset('js/app.js') }}"></script>
-    <script src="{{ asset('backend/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('backend/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <div id="app">
+        <div id="pcoded" class="pcoded">
+            {{-- <div class="pcoded-overlay-box"></div> --}}
+            <div class="pcoded-container navbar-wrapper">
 
+                <nav class="navbar header-navbar pcoded-header" id="topbar"
+                    v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true "
+                    style="display: none;">
+                    <div class=" navbar-wrapper">
+
+                        <div class="navbar-logo">
+                            <a class="mobile-menu" id="mobile-collapse" href="#!">
+                                <i class="ti-menu"></i>
+                            </a>
+                            <a class="mobile-search morphsearch-search" href="#">
+                                <i class="ti-search"></i>
+                            </a>
+                            <a href="index.html">
+                                <img class="img-fluid" src="{{ asset('backend/assets/images/logo.png') }}"
+                                    alt="Theme-Logo" />
+                            </a>
+                            <a class="mobile-options">
+                                <i class="ti-more"></i>
+                            </a>
+                        </div>
+
+                        <div class="navbar-container container-fluid">
+                            <ul class="nav-left">
+                                <li>
+                                    <div class="sidebar_toggle"><a href="javascript:void(0)"><i class="ti-menu"></i></a>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <a href="#!" onclick="javascript:toggleFullScreen()">
+                                        <i class="ti-fullscreen"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                            <ul class="nav-right">
+                                <li class="header-notification">
+                                    <a href="#!">
+                                        <i class="ti-bell"></i>
+                                        <span class="badge bg-c-pink"></span>
+                                    </a>
+                                    <ul class="show-notification">
+                                        <li>
+                                            <h6>Notifications</h6>
+                                            <label class="label label-danger">New</label>
+                                        </li>
+                                        <li>
+                                            <div class="media">
+                                                <img class="d-flex align-self-center img-radius"
+                                                    src="{{ asset('backend/assets/images/avatar-4.jpg') }}"
+                                                    alt="Generic placeholder image">
+                                                <div class="media-body">
+                                                    <h5 class="notification-user">John Doe</h5>
+                                                    <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer
+                                                        elit.</p>
+                                                    <span class="notification-time">30 minutes ago</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        {{-- <li>
+                                            <div class="media">
+                                                <img class="d-flex align-self-center img-radius"
+                                                    src="{{ asset('backend/assets/images/avatar-3.jpg') }}"
+                                                    alt="Generic placeholder image">
+                                                <div class="media-body">
+                                                    <h5 class="notification-user">Joseph William</h5>
+                                                    <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer
+                                                        elit.</p>
+                                                    <span class="notification-time">30 minutes ago</span>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="media">
+                                                <img class="d-flex align-self-center img-radius"
+                                                    src="{{ asset('backend/assets/images/avatar-4.jpg') }}"
+                                                    alt="Generic placeholder image">
+                                                <div class="media-body">
+                                                    <h5 class="notification-user">Sara Soudein</h5>
+                                                    <p class="notification-msg">Lorem ipsum dolor sit amet, consectetuer
+                                                        elit.</p>
+                                                    <span class="notification-time">30 minutes ago</span>
+                                                </div>
+                                            </div>
+                                        </li> --}}
+                                    </ul>
+                                </li>
+                                <li class="user-profile header-notification">
+                                    <a href="#!">
+                                        <img src="{{ asset('backend/assets/images/avatar-4.jpg') }}"
+                                            class="img-radius" alt="User-Profile-Image">
+                                        <span id="nameAdmin">John Doe</span>
+                                        <i class="ti-angle-down"></i>
+                                    </a>
+                                    <ul class="show-notification profile-notification">
+                                        <li>
+                                            <a href="#!">
+                                                <i class="ti-settings"></i> Settings
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#">
+                                                <i class="ti-user"></i> Profile
+                                            </a>
+                                        </li>
+                                        {{-- <li>
+                                            <a href="#">
+                                                <i class="ti-email"></i> My Messages
+                                            </a>
+                                        </li> --}}
+                                        {{-- <li>
+                                            <a href="#">
+                                                <i class="ti-lock"></i> Lock Screen
+                                            </a>
+                                        </li> --}}
+                                        <li>
+                                            <a href="">
+                                                <router-link to="/logout">
+                                                    <i class="ti-layout-sidebar-left"></i> Logout
+                                                </router-link>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+                <div class="pcoded-main-container" style="margin-top: 0px;">
+                    <div class="pcoded-wrapper">
+                        <nav class="pcoded-navbar" id="sidebar"
+                            v-show="$route.path === '/' || $route.path === '/register' || $route.path === '/forget' ? false : true "
+                            style="display:  none;">
+                            <div class=" sidebar_toggle"><a href="#"><i class="icon-close icons"></i></a>
+                            </div>
+                            <div class="pcoded-inner-navbar main-menu">
+
+                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.navigation">Số liệu</div>
+                                <router-link to="/home">
+                                    <ul class="pcoded-item pcoded-left-item">
+                                        <li class="active">
+                                            <a href="#">
+                                                {{-- <router-link to="/home"> --}}
+                                                <span class="pcoded-micon"><i class="ti-home"></i><b>D</b></span>
+                                                <span class="pcoded-mtext" data-i18n="nav.dash.main">Thống kê</span>
+                                                <span class="pcoded-mcaret"></span>
+                                                {{-- </router-link> --}}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </router-link>
+                                <router-link to="/pos">
+                                    <ul class="pcoded-item pcoded-left-item">
+                                        <li class="active">
+                                            <a href="#">
+                                                <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                                <span class="pcoded-mtext"
+                                                    data-i18n="nav.basic-components.main">POS</span>
+                                                <span class="pcoded-mcaret"></span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </router-link>
+                                <div class="pcoded-navigatio-lavel" data-i18n="nav.category.forms">Quản lý
+                                </div>
+                                <ul class="pcoded-item pcoded-left-item">
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Nhân
+                                                viên</span>
+                                            <span class="pcoded-mcaret"></span>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/store-employee">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm nhân viên</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/employee">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem nhân
+                                                        viên</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/store-position">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm chức vụ</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/position">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem chức vụ</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Nhà cung
+                                                cấp</span>
+                                            <span class="pcoded-mcaret"></span>
+                                            </router-link>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/store-supplier">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm nhà cung
+                                                        cấp</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/supplier">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem nhà cung
+                                                        cấp</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Nhóm
+                                                món</span>
+                                            <span class="pcoded-mcaret"></span>
+                                            </router-link>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/store-category">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm nhóm món</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/category">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem nhóm
+                                                        món</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Món</span>
+                                            <span class="pcoded-mcaret"></span>
+                                            </router-link>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/store-product">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm món</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/product">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem món</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Chi
+                                                phí</span>
+                                            <span class="pcoded-mcaret"></span>
+                                            </router-link>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/store-expense">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm chi phí</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/expense">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem chi phí</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Khách
+                                                hàng</span>
+                                            <span class="pcoded-mcaret"></span>
+                                            </router-link>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/store-customer">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm khách hàng</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/customer">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem khách
+                                                        hàng</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Khách
+                                                hàng</span>
+                                            <span class="pcoded-mcaret"></span>
+                                            </router-link>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/store-customer">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm khách hàng</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/customer">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem khách
+                                                        hàng</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Tính
+                                                lương</span>
+                                            <span class="pcoded-mcaret"></span>
+                                            </router-link>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/given-salary">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Thêm lương</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/salary">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Xem lương
+                                                        hàng</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="pcoded-hasmenu ">
+                                        <a href="javascript:void(0)">
+                                            <span class="pcoded-micon"><i class="ti-layout-grid2-alt"></i></span>
+                                            <span class="pcoded-mtext" data-i18n="nav.basic-components.main">Hóa
+                                                đơn</span>
+                                            <span class="pcoded-mcaret"></span>
+                                            </router-link>
+                                        </a>
+                                        <ul class="pcoded-submenu">
+                                            <li class=" ">
+                                                <router-link to="/order">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.alert">Hóa đơn hôm nay</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                            <li class=" ">
+                                                <router-link to="/searchorder">
+                                                    <span class="pcoded-micon"><i class="ti-angle-right"></i></span>
+                                                    <span class="pcoded-mtext"
+                                                        data-i18n="nav.basic-components.breadcrumbs">Tìm kiếm</span>
+                                                    <span class="pcoded-mcaret"></span>
+                                                </router-link>
+                                            </li>
+                                        </ul>
+                                    </li>
+
+                                </ul>
+                            </div>
+                        </nav>
+                        <div class="pcoded-content">
+                            <div class="pcoded-inner-content">
+                                <div class="main-body">
+                                    <div class="page-wrapper">
+                                        <div class="container-fluid" id="container-wrapper">
+                                            <router-view></router-view>
+                                        </div>
+                                    </div>
+
+                                    <div id="styleSelector">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{{ asset('js/app.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/assets/js/jquery/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/assets/js/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/assets/js/popper.js/popper.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/assets/js/bootstrap/js/bootstrap.min.js') }}"></script>
+    <!-- jquery slimscroll js -->
+    <script type="text/javascript" src="{{ asset('backend/assets/js/jquery-slimscroll/jquery.slimscroll.js') }}">
+    </script>
+    <!-- modernizr js -->
+    <script type="text/javascript" src="{{ asset('backend/assets/js/modernizr/modernizr.js') }}"></script>
+    <!-- am chart -->
+    <script src="{{ asset('backend/assets/pages/widget/amchart/amcharts.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/pages/widget/amchart/serial.min.js') }}"></script>
+    <!-- Todo js -->
+    <script type="text/javascript " src="{{ asset('backend/assets/pages/todo/todo.js') }} "></script>
+    <!-- Custom js -->
+    <script type="text/javascript" src="{{ asset('backend/assets/pages/dashboard/custom-dashboard.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('backend/assets/js/script.js') }}"></script>
+    <script type="text/javascript " src="{{ asset('backend/assets/js/SmoothScroll.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/pcoded.min.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/demo-12.js') }}"></script>
+    <script src="{{ asset('backend/assets/js/jquery.mCustomScrollbar.concat.min.js') }}"></script>
+    <script src="https://js.pusher.com/7.0/pusher.min.js"></script>
     <script type="text/javascript">
         let token = localStorage.getItem('token');
-        if (token) {
-            $("#sidebar").css("display", "");
-            $("#topbar").css("display", "");
-
+        let user = localStorage.getItem('user');
+        console.log(user);
+        if (user) {
+            console.log(user);
+            $("#nameAdmin").html(user);
         }
+
+        Pusher.logToConsole = true;
+
+        var pusher = new Pusher('964d59472591afed5126', {
+            cluster: 'ap1'
+        });
+
+        var channel = pusher.subscribe('log-channel');
+        channel.bind('log-event', function(data) {
+            alert(JSON.stringify(data));
+        });
     </script>
 
 
 
 
     {{-- <script src="{{ asset('backend/vendor/jquery-easing/jquery.easing.min.js') }}"></script> --}}
-    <script src="{{ asset('backend/js/ruang-admin.min.js') }}"></script>
+    {{-- <script src="{{ asset('backend/js/ruang-admin.min.js') }}"></script>
     <script src="{{ asset('backend/vendor/chart.js/Chart.min.js') }}"></script>
-    <script src="{{ asset('backend/js/demo/chart-area-demo.js') }}"></script>
+    <script src="{{ asset('backend/js/demo/chart-area-demo.js') }}"></script> --}}
+    {{-- <script src="https://js.pusher.com/7.0/pusher.min.js"></script> --}}
 </body>
 
 </html>

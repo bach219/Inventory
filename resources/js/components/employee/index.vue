@@ -2,7 +2,7 @@
     <div>
         <div class="row">
             <router-link to="/store-employee" class="btn btn-primary"
-                >Xem nhân viên
+                >Thêm nhân viên
             </router-link>
         </div>
         <br />
@@ -41,8 +41,9 @@
                                     <th>Tên</th>
                                     <th>Ảnh</th>
                                     <th>SĐT</th>
-                                    <th>Mức lương</th>
+                                    <th>Mức lương(giờ)</th>
                                     <th>Ngày bắt đầu làm</th>
+                                    <th>Chức vụ</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -61,6 +62,16 @@
                                     <td>{{ employee.phone }}</td>
                                     <td>{{ employee.sallery }}</td>
                                     <td>{{ employee.joining_date }}</td>
+
+                                    <td
+                                        v-for="position in positions"
+                                        :key="position.id"
+                                        v-if="
+                                            position.id == employee.position_id
+                                        "
+                                    >
+                                        {{ position.position_name }}
+                                    </td>
                                     <td>
                                         <router-link
                                             :to="{
@@ -99,6 +110,7 @@ export default {
     data() {
         return {
             employees: [],
+            positions: [],
             searchTerm: ""
         };
     },
@@ -115,6 +127,12 @@ export default {
             axios
                 .get("/api/employee/")
                 .then(({ data }) => (this.employees = data))
+                .catch();
+        },
+        allPosition() {
+            axios
+                .get("/api/position/")
+                .then(({ data }) => (this.positions = data))
                 .catch();
         },
         deleteEmployee(id) {
@@ -146,6 +164,7 @@ export default {
     },
     created() {
         this.allEmployee();
+        this.allPosition();
     }
 };
 </script>

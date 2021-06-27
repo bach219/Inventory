@@ -4,6 +4,10 @@
             <router-link to="/employee" class="btn btn-primary"
                 >Xem nhân viên
             </router-link>
+            <p style="margin: 10px;"></p>
+            <router-link to="/store-position" class="btn btn-primary"
+                >Thêm chức vụ
+            </router-link>
         </div>
 
         <div class="row justify-content-center">
@@ -80,7 +84,7 @@
 
                                                 <div class="col-md-6">
                                                     <input
-                                                        type="text"
+                                                        type="number"
                                                         class="form-control"
                                                         id="exampleInputFirstName"
                                                         placeholder="Mức lương theo giờ"
@@ -136,21 +140,6 @@
                                                         {{ errors.password[0] }}
                                                     </small>
                                                 </div>
-                                                <!-- <div class="col-md-6">
-                                                    <input
-                                                        type="text"
-                                                        class="form-control"
-                                                        id="exampleInputFirstName"
-                                                        placeholder="Tên gọi"
-                                                        v-model="form.nid"
-                                                    />
-                                                    <small
-                                                        class="text-danger"
-                                                        v-if="errors.nid"
-                                                    >
-                                                        {{ errors.nid[0] }}
-                                                    </small>
-                                                </div> -->
                                             </div>
                                         </div>
 
@@ -172,7 +161,35 @@
                                                     </small>
                                                 </div>
 
-                                                <div class="col-md-6"></div>
+                                                <div class="col-md-6">
+                                                    <select
+                                                        class="form-control"
+                                                        v-model="
+                                                            form.position_id
+                                                        "
+                                                    >
+                                                        <option
+                                                            :value="null"
+                                                            disabled
+                                                            >Chức vụ</option
+                                                        >
+                                                        <option
+                                                            :value="position.id"
+                                                            v-for="position in positions"
+                                                            :key="position.id"
+                                                        >
+                                                            {{
+                                                                position.position_name
+                                                            }}
+                                                        </option>
+                                                    </select>
+                                                    <small
+                                                        class="text-danger"
+                                                        v-if="errors.position"
+                                                    >
+                                                        {{ errors.position[0] }}
+                                                    </small>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -237,6 +254,12 @@ export default {
             this.$router.push({ name: "/" });
         }
     },
+    created() {
+        axios
+            .get("/api/position/")
+            .then(({ data }) => (this.positions = data))
+            .catch(console.log("error"));
+    },
 
     data() {
         return {
@@ -247,10 +270,11 @@ export default {
                 sallery: null,
                 address: null,
                 photo: null,
-                // nid: null,
+                position_id: null,
                 joining_date: null,
                 password: null
             },
+            positions: "",
             errors: {}
         };
     },

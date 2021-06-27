@@ -57,6 +57,7 @@ class EmployeeController extends Controller
          $employee->phone = $request->phone;
          $employee->sallery = $request->sallery;
          $employee->address = $request->address;
+         $employee->position_id = $request->position_id;
          if(!empty($request->password) || $request->password != "")
             $employee->password = Hash::make($request->password);
          // $employee->nid = $request->nid;
@@ -70,6 +71,7 @@ class EmployeeController extends Controller
          $employee->phone = $request->phone;
          $employee->sallery = $request->sallery;
          $employee->address = $request->address;
+         $employee->position_id = $request->position_id;
          if(!empty($request->password) || $request->password != "")
             $employee->password = Hash::make($request->password);
          // $employee->nid = $request->nid;
@@ -111,6 +113,7 @@ class EmployeeController extends Controller
          $data['phone'] = $request->phone;
          $data['sallery'] = $request->sallery;
          $data['address'] = $request->address;
+         $data['position_id'] = $request->position_id;
          if(!empty($request->password) || $request->password != "")
             $data['password'] = Hash::make($request->password);
       //   $data['nid'] = $request->nid;

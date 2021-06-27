@@ -22,13 +22,15 @@ class PosController extends Controller
   public function OrderDone(Request $request)
   {
 
-    $validatedData = $request->validate([
-      'customer_id' => 'required',
-      'payby' => 'required',
-    ]);
+    // $validatedData = $request->validate([
+    //   'customer_id' => 'required',
+    //   'payby' => 'required',
+    // ]);
 
     $data = array();
-    $data['customer_id'] = $request->customer_id;
+    if($request->customer_id)
+      $data['customer_id'] = $request->customer_id;
+    // $data['customer_id'] = $request->customer_id;
     $data['qty'] = $request->qty;
     $data['sub_total'] = $request->subtotal;
     $data['vat'] = $request->vat;
@@ -39,7 +41,9 @@ class PosController extends Controller
     $data['order_date'] = date('d/m/Y');
     $data['order_month'] = date('F');
     $data['order_year'] = date('Y');
-    $data['employee_id'] = Auth::user()->id;
+    if($request->employee_id)
+      $data['employee_id'] = $request->employee_id;
+    $data['employee_id'] = 2;
     $order_id = DB::table('orders')->insertGetId($data);
 
     $contents = DB::table('pos')->get();
@@ -105,6 +109,7 @@ class PosController extends Controller
   public function TodayExpense()
   {
     $date = date('d/m/Y');
+    // $expense = DB::table('expenses')->where('expense_date', $date)->count();
     $expense = DB::table('expenses')->where('expense_date', $date)->sum('amount');
     return response()->json($expense);
   }
