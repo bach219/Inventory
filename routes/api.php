@@ -13,9 +13,14 @@ Route::group([
     Route::post('logout', 'AuthController@logout');
     Route::post('refresh', 'AuthController@refresh');
     Route::post('me', 'AuthController@me');
+    Route::post('profile', 'AuthController@profile');
+    Route::post('reset', 'AuthController@reset');
 
 });
 Route::post('/forget', 'SendMailController@sendEmail');
+Route::post('/forgot', 'SendMailController@forgotEmployee');
+    // Route::post('employee/forgot', 'EmployeeAuthController@forgot');
+Route::get('/demo', 'LogController@demo');
 
 Route::apiResource('/employee', 'Api\EmployeeController');
 Route::apiResource('/supplier', 'Api\SupplierController');
@@ -82,6 +87,7 @@ Route::group([
     Route::post('employee/logout', 'EmployeeAuthController@logout');
     Route::post('employee/refresh', 'EmployeeAuthController@refresh');
     Route::post('employee/me', 'EmployeeAuthController@me');
+    Route::post('employee/update', 'EmployeeAuthController@update');
 });
 
 

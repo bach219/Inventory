@@ -2,46 +2,55 @@ import Token from './Token'
 import AppStorage from './AppStorage'
 
 
-class User{
+class User {
 
- responseAfterLogin(res){
- 	const access_token = res.data.access_token
- 	const username = res.data.name
- 	if (Token.isValid(access_token)) {
- 		AppStorage.store(access_token,username)
- 	}
- }
- 
+    responseAfterLogin(res) {
+        const access_token = res.data.access_token
+        const username = res.data.name
+        const user_id = res.data.user_id
+        if (Token.isValid(access_token)) {
+            AppStorage.store(access_token, username, user_id)
+                // AppStorage.storeUser(username)
 
-  hasToken(){
-  	const storeToken = localStorage.getItem('token');
-  	if (storeToken) {
-  		return Token.isValid(storeToken)? true : false
-  	}
-  	false
-  }
-
-  loggedIn(){
-  	return this.hasToken()
-  }
-
-  name(){
-  	if (this.loggedIn()) {
-  		return localStorage.getItem('user');
-  	}
-  }
+            // localStorage.setItem('token', access_token);
+            // localStorage.setItem('user', username);
+            // localStorage.setItem('id', user_id);
+            // AppStorage.setToken(access_token)
+            // AppStorage.setName(username)
+            // AppStorage.setId(user_id)
+        }
+    }
 
 
-	id(){
-	  	if (this.loggedIn()) {
-	  		const payload = Token.payload(localStorage.getItem('token'));
-	  		return payload.sub
-	  	}
-	  	return false
-	  }
+    hasToken() {
+        const storeToken = localStorage.getItem('token');
+        if (storeToken) {
+            return Token.isValid(storeToken) ? true : false
+        }
+        false
+    }
 
- 
- 
+    loggedIn() {
+        return this.hasToken()
+    }
+
+    name() {
+        if (this.loggedIn()) {
+            return localStorage.getItem('user');
+        }
+    }
+
+
+    id() {
+        if (this.loggedIn()) {
+            const payload = Token.payload(localStorage.getItem('token'));
+            return payload.sub
+        }
+        return false
+    }
+
+
+
 }
 
 export default User = new User()

@@ -22,4 +22,8 @@ class LogController extends Controller
 
         return response()->json(['status' => $dispatched]);
     }
+    public function demo()
+    {
+        return response()->json( \Carbon\Carbon::parse('2019-09-13 11:17:44')->diffInHours(\Carbon\Carbon::parse('2019-09-11 11:22:55')));
+    }
 }

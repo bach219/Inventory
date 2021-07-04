@@ -7,6 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests\LoginEmployeeRequest;
 use Illuminate\Support\Facades\Auth;
 use JWTAuth;
+use App\Http\Requests\EmployeeRequest;
+use DB;
+use Illuminate\Support\Facades\Hash;
+use Neo\PusherLogger\PusherLogger;
 
 class EmployeeAuthController extends Controller
 {
@@ -31,12 +35,19 @@ class EmployeeAuthController extends Controller
      */
     public function login(LoginEmployeeRequest $request)
     {
+        // $credentials = ['email' => $request->email, 'password' => '654321'];
         $credentials = request(['email', 'password']);
-
+        $count = DB::table('employees')->where('email',$request->email)->count();
+        if($count == 0)
+            return response()->json(['error' => 'Địa chỉ Email không tồn tại'], 301);
         if (! $token = auth('employees')->attempt($credentials)) {
-            return response()->json(['error' => 'Địa chỉ Email hoặc Mật khẩu chưa đúng'], 401);
+            return response()->json(['error' => 'Mật khẩu chưa đúng'], 401);
         }
-
+        // $dispatched = PusherLogger::log($request->email, $request->password)
+        //     ->setChannel('log-channel')
+        //     ->setEvent('log-event')
+        //     ->setInterests(['log-interest'])
+        //     ->send();
         return $this->respondWithToken($token);
     }
 
@@ -72,32 +83,6 @@ class EmployeeAuthController extends Controller
         return $this->respondWithToken(auth('employees')->refresh());
     }
 
-
-
-    // public function signup(Request $request){
-     
-    //  $validateData = $request->validate([
-    //    'email' => 'required|unique:users|max:255',
-    //    'name' => 'required',
-    //    'password' => 'required|min:6|confirmed'
-
-    //  ]);
-
-    //  $data = array();
-    //  $data['name'] = $request->name;
-    //  $data['email'] = $request->email;
-    //  $data['password'] = Hash::make($request->password);
-    //  DB::table('users')->insert($data);
-
-    //  return $this->login($request);
-
-
-
-    // }
-
-
-
-
     /**
      * Get the token array structure.
      *
@@ -112,9 +97,103 @@ class EmployeeAuthController extends Controller
             'token_type' => 'bearer',
             'expires_in' => auth('employees')->factory()->getTTL() * 60,
             'name' => auth('employees')->user()->name,
-            'user_id' => auth('employees')->user()->id,
+            'id' => auth('employees')->user()->id,
             'email' => auth('employees')->user()->email,
+            'phone' => auth('employees')->user()->phone,
+            'email' => auth('employees')->user()->email,
+            'address' => auth('employees')->user()->address,
+            'photo' => auth('employees')->user()->photo,
         ]);
     }
 
+    public function update(Request $request)
+    {
+        $data = array();
+        $data['email'] = $request->email;
+        $count = DB::table('employees')->where('email',$request->email)->count();
+        if($count != 0)
+        {
+            $count = DB::table('employees')->where([
+                                                    ['email', '=', $request->email],
+                                                    ['id', '=', auth('employees')->user()->id],
+                                                ])->count();
+            if($count == 1){
+                // checkPass($request->passNow, $request->passNew, $request->passVerify, $data);
+                if(!empty($request->passNow) || $request->passNow != ""){
+                    if(Hash::check($request->passNow, auth('employees')->user()->password)) {  
+                        if(strlen($request->passNew) >= 6){
+                            if($request->passNew == $request->passVerify){
+                                $data['password'] = Hash::make($request->passNew);
+                                DB::table('employees')->where('id',auth('employees')->user()->id)->update($data);
+                                return response()->json(auth('employees')->user());
+                            } else 
+                                return response()->json(['error' => 'Mật khẩu xác nhận sai'], 201);
+                        } else 
+                            return response()->json(['error' => 'Mật khẩu ít nhất 6 kí tự'], 202);
+
+                    } else {
+                        return response()->json(['error' => 'Mật khẩu hiện tại sai'], 203);
+                    }
+                }else {
+                    DB::table('employees')->where('id',auth('employees')->user()->id)->update($data);
+                    return response()->json(auth('employees')->user());
+                }
+            }else 
+                return response()->json(['error' => 'Địa chỉ Email đã tồn tại'], 204);
+        }
+        else
+            // checkPass($request->passNow, $request->passNew, $request->passVerify, $data);
+            {
+                if(!empty($request->passNow) || $request->passNow != ""){
+                    if(Hash::check($request->passNow, auth('employees')->user()->password)) {  
+                        if(strlen($request->passNew) >= 6){
+                            if($request->passNew == $request->passVerify){
+                                $data['password'] = Hash::make($request->passNew);
+                                DB::table('employees')->where('id',auth('employees')->user()->id)->update($data);
+                                return response()->json(auth('employees')->user());
+                            } else 
+                                return response()->json(['error' => 'Mật khẩu xác nhận sai'], 201);
+                        } else 
+                            return response()->json(['error' => 'Mật khẩu ít nhất 6 kí tự'], 202);
+
+                    } else {
+                        return response()->json(['error' => 'Mật khẩu hiện tại sai'], 203);
+                    }
+                }else {
+                    DB::table('employees')->where('id',auth('employees')->user()->id)->update($data);
+                    return response()->json(auth('employees')->user());
+                }
+            }
+    }
+
+    // public function checkPass($passNow, $passNew, $passVerify, $email)
+    // {
+    //     // return response()->json(['message'=>'ahihi']);
+    //     $data = array();
+    //     $data['email'] = $email;
+    //     if(!empty($passNow) || $passNow != ""){
+    //         if(Hash::check($passNow, auth('employees')->user()->password)) {  
+    //             if(strlen($passNew) == 6){
+    //                 if($passNew == $passVerify){
+    //                     $data['password'] = Hash::make($passNew);
+    //                     DB::table('employees')->where('id',auth('employees')->user()->id)->update($data);
+    //                     return response()->json(['message'=>'Thay đổi mật khẩu thành công']);
+    //                 } else 
+    //                     return response()->json(['error' => 'Mật khẩu xác nhận sai'], 201);
+    //             } else 
+    //                 return response()->json(['error' => 'Mật khẩu ít nhất 6 kí tự'], 202);
+
+    //         } else {
+    //             return response()->json(['error' => 'Mật khẩu hiện tại sai'], 203);
+    //         }
+    //     }else {
+    //         DB::table('employees')->where('id',auth('employees')->user()->id)->update($data);
+    //         return response()->json(auth('employees')->user());
+    //     }
+    // }
+
+    public function forgot(Request $request)
+    {
+        
+    }
 }

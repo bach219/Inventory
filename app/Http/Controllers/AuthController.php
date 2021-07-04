@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\Hash;
 use DB;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\SignUpRequest;
+use App\Http\Requests\ProfileRequest;
+use App\Http\Requests\ResetRequest;
 
 class AuthController extends Controller
 {
@@ -124,9 +126,60 @@ class AuthController extends Controller
     }
 
 
+    public function profile(ProfileRequest $request)
+    {
+        $data = array();
+        $data['name'] = $request->name;
+        $data['email'] = $request->email;
+        $data['phone'] = $request->phone;
+        $data['address'] = $request->address;
+        // $check = DB::table('users')->where('id',auth()->user()->id)->update($data);
+        $data['photo'] = null;
+        $image = $request->photo;
 
+         if ($image) {
+            $position = strpos($image, ';');
+            $sub = substr($image, 0, $position);
+            $ext = explode('/', $sub)[1];
 
+            $name = time().".".$ext;
+            $img = Image::make($image)->resize(240,200);
+            $upload_path = 'backend/employee/';
+            $image_url = $upload_path.$name;
+            $success = $img->save($image_url);
+            
+            if ($success) {
+               $data['photo'] = $image_url;
+               $img = DB::table('users')->where('id',auth()->user()->id)->first();
+               $image_path = $img->photo;
+               $done = unlink($image_path);
+               $user  = DB::table('users')->where('id',auth()->user()->id)->update($data);
+            }
+            
+         }else{
+               $oldphoto = $request->photo;
+               $data['photo'] = $oldphoto;
+               $user = DB::table('users')->where('id',auth()->user()->id)->update($data);
+         }
 
+        return response()->json( DB::table('users')->where('id',auth()->user()->id)->get());
+
+    }
+    public function reset(ResetRequest $request )
+    {
+        $data = array();
+        $data['password'] = Hash::make($request->passwordnew);
+
+        if(Hash::check($request->passwordnow, auth()->user()->password)) {   
+            DB::table('users')->where('id',auth()->user()->id)->update($data);
+            return response()->json(['message'=>'Thay đổi mật khẩu thành công']);
+
+        } else {
+            return response()->json(['error' => 'Mật khẩu hiện tại sai'], 401);
+        }
+    }
+
+    
 
 
 

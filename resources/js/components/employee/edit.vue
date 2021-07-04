@@ -172,7 +172,7 @@
                                                             v-for="position in positions"
                                                             :key="position.id"
                                                             :selected="
-                                                                position.id ==
+                                                                position.id ===
                                                                     form.position_id
                                                             "
                                                             >{{

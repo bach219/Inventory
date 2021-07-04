@@ -63,6 +63,11 @@ let order = require('./components/order/order.vue').default;
 let vieworder = require('./components/order/vieworder.vue').default;
 let searchorder = require('./components/order/search.vue').default;
 
+// Profile Component  
+let editProfile = require('./components/profile/editProfile.vue').default;
+let editStore = require('./components/profile/editStore.vue').default;
+let resetPass = require('./components/profile/resetPass.vue').default;
+
 
 
 
@@ -128,6 +133,9 @@ export const routes = [
     { path: '/view-order/:id', component: vieworder, name: 'view-order' },
     { path: '/searchorder', component: searchorder, name: 'searchorder' },
 
-
+    // Profile Routes
+    { path: '/edit-profile', component: editProfile, name: 'edit-profile' },
+    { path: '/edit-store', component: editStore, name: 'edit-store' },
+    { path: '/reset-pass', component: resetPass, name: 'reset-pass' }
 
 ]
